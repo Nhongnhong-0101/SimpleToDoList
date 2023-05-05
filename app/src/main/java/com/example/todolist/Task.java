@@ -1,12 +1,14 @@
 package com.example.todolist;
 
+import java.util.Date;
+
 public class Task {
     private String name;
-    private String date;
+    private Date date;
     private boolean done;
     private int id;
     public Task () {};
-    public Task(String name, String date, boolean done)
+    public Task(String name, Date date, boolean done)
     {
         this.date= date;
         this.name = name;
@@ -21,11 +23,11 @@ public class Task {
         return name;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 

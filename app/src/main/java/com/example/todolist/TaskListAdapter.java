@@ -12,7 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TaskListAdapter extends BaseAdapter {
@@ -55,7 +57,10 @@ public class TaskListAdapter extends BaseAdapter {
             CheckBox done = v.findViewById(R.id.cbDone);
 
             tvName.setText(task.getName());
-            tvDate.setText(task.getDate());
+            Date date = task.getDate(); // Lấy ngày hiện tại
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); // Định dạng ngày
+            String stringDate = dateFormat.format(date); // Chuyển đổi Date thành String theo định dạng
+            tvDate.setText(stringDate);
 
             if (task.isDone() == true)
             {
