@@ -58,8 +58,8 @@ public class NewTask extends AppCompatActivity {
                 resultIntent.putExtra("des", des);
                 resultIntent.putExtra("date", date.getTime());
                 resultIntent.putExtra("isDone", isDone);
-
                 setResult(Activity.RESULT_OK, resultIntent);
+
 
                 finish();
 

@@ -68,11 +68,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_NEW_TASK && resultCode == RESULT_OK) {
             // Lấy đối tượng Task từ Intent
-            Intent intent = getIntent();
-            String taskName = intent.getStringExtra("name");
-            String taskDes = intent.getStringExtra("des");
-            boolean isDone = intent.getBooleanExtra("isDone", false);
-            long taskDateInMillis = intent.getLongExtra("date", 0L);
+            String taskName = data.getStringExtra("name");
+            String taskDes = data.getStringExtra("des");
+            boolean isDone = data.getBooleanExtra("isDone", false);
+            long taskDateInMillis = data.getLongExtra("date", 0L);
 
             Date taskDate = new Date(taskDateInMillis);
             Task task = new Task(taskName, taskDate, isDone);
