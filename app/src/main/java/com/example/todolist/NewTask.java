@@ -48,7 +48,6 @@ public class NewTask extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
                 boolean isDone = cbDone.isChecked();
 
                 Task newTask = new Task(name, date, isDone);

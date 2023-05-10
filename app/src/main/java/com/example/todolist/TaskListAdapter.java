@@ -1,5 +1,6 @@
 package com.example.todolist;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,8 @@ import java.util.Date;
 import java.util.List;
 
 public class TaskListAdapter extends BaseAdapter {
-    Context context;
+
+    private Context context;
     ArrayList<Task> item;
 
     public TaskListAdapter(Context context, ArrayList<Task> item) {
@@ -44,23 +46,26 @@ public class TaskListAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         View v = view;
-        if (v == null) {
-            v = LayoutInflater.from(context).inflate(R.layout.list_item_task, viewGroup, false);
-        }
+      if (v == null) {
+           v = LayoutInflater.from(context).inflate(R.layout.list_item_task, viewGroup, false);
+          if (v == null) {
+              return null; // Nếu v vẫn là null, trả về null để tránh gây lỗi
+          }
+       }
+
 
         // anh xa du lieu
         Task task = item.get(i);
         if(task != null)
         {
             TextView tvName = v.findViewById(R.id.tvName);
-            TextView tvDate = v.findViewById(R.id.tvDate);
+            TextView tvDate1 = v.findViewById(R.id.tvDateofTask);
             CheckBox done = v.findViewById(R.id.cbDone);
-
             tvName.setText(task.getName());
             Date date = task.getDate(); // Lấy ngày hiện tại
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); // Định dạng ngày
             String stringDate = dateFormat.format(date); // Chuyển đổi Date thành String theo định dạng
-            tvDate.setText(stringDate);
+            tvDate1.setText(stringDate);
 
             if (task.isDone() == true)
             {
