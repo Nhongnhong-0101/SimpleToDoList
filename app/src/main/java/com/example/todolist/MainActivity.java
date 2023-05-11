@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,105 +24,67 @@ import android.widget.PopupMenu;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE_NEW_TASK = 1;
-
-    ListView listView;
-    ActivityResultLauncher<Intent> launcher;
-    ActivityResultLauncher<Intent> launcherEdit;
-
+    ListView  lvTasks ;
+    List<Task> tasks ;
     TaskListAdapter adapter;
-    ArrayList<Task> listTask;
+    ActivityResultLauncher <Intent> fromNew;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //
+        tasks = new ArrayList<>();
+        //
+        lvTasks = findViewById(R.id.lvTasks);
+        //
+        adapter = new TaskListAdapter(this, R.layout.list_item_task, tasks);
+        lvTasks.setAdapter(adapter);
+        registerForContextMenu(lvTasks);
 
-        //khởi tạo task
-        listTask = new ArrayList<>();
-        listTask.add(new Task("Tên task1", new Date(), false));
-        listTask.add(new Task("Tên task2", new Date(), false));
-
-
-
-        listView = findViewById(R.id.lvTasks);
-        registerForContextMenu(listView);
-
-
-        //khởi tạo adapert
-
-        adapter = new TaskListAdapter(MainActivity.this, listTask);
-        listView.setAdapter(adapter);
-
-        launcher = registerForActivityResult(
+        fromNew = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
-                        if(result.getResultCode() == Activity.RESULT_OK){
+                        if (result.getResultCode() == Activity.RESULT_OK){
                             Intent intent = result.getData();
-                            Task temp = (Task) intent.getExtras().get("temp");
-                            listTask.add(temp);
-                            adapter.notifyDataSetChanged();
-
+                            Task newTask = (Task) intent.getExtras().get("newTask");
+                            tasks.add(newTask);
+                            lvTasks.deferNotifyDataSetChanged();
                         }
                     }
-                });
-
-
-
+                }
+        );
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        getMenuInflater().inflate(R.menu.items_menu, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        return super.onContextItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_task, menu);
+        getMenuInflater().inflate(R.menu.option_menui, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId())
+        if(item.getItemId() == R.id.btnNew)
         {
-            case R.id.btnNew:
-            {
-                Intent intent = new Intent(MainActivity.this, NewTask.class );
-                startActivity(intent);
-                break;
-            }
+            fromNew.launch(new Intent(MainActivity.this, NewTask.class));
 
         }
         return super.onOptionsItemSelected(item);
     }
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//
-//        if (requestCode == REQUEST_CODE_NEW_TASK && resultCode == RESULT_OK) {
-//            // Lấy đối tượng Task từ Intent
-//            String taskName = data.getStringExtra("name");
-//            String taskDes = data.getStringExtra("des");
-//            boolean isDone = data.getBooleanExtra("isDone", false);
-//            long taskDateInMillis = data.getLongExtra("date", 0L);
-//
-//            Date taskDate = new Date(taskDateInMillis);
-//            Task task = new Task(taskName, taskDate, isDone);
-//
-//            // Thêm task vào danh sách
-//            listTask.add(task);
-//
-//            // Cập nhật lại ListView
-//            adapter.notifyDataSetChanged();
-//        } else {
-//
-//            // bạn không làm gì cả.
-//        }
-//    }
-
 }

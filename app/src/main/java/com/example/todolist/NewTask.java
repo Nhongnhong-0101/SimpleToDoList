@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,6 +21,7 @@ public class NewTask extends AppCompatActivity {
     private EditText edDate;
     private CheckBox cbDone;
     private Button btSave;
+    Task tempTask;
 
 
 
@@ -37,29 +39,29 @@ public class NewTask extends AppCompatActivity {
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = edTitle.getText().toString();
-                String des = edDes.getText().toString();
-                String stringDate = edDate.getText().toString();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Intent intent = new Intent(NewTask.this, MainActivity.class);
+                Bundle bundle = new Bundle();
+
+                // Lấy chuỗi đầu vào từ EditText
+                String dateString = edDate.getText().toString();
                 Date date = null;
+
+                // Tạo đối tượng SimpleDateFormat với định dạng mong muốn
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+                 // Sử dụng đối tượng SimpleDateFormat để phân tích chuỗi thành kiểu dữ liệu Date
                 try {
-                    date = dateFormat.parse(stringDate);
-                    // Xử lý date ở đây
+                     date = format.parse(dateString);
+                    // Ở đây bạn có thể sử dụng đối tượng Date để làm bất kỳ điều gì bạn muốn
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                boolean isDone = cbDone.isChecked();
+                tempTask = new Task(edTitle.getText().toString(), edDes.getText().toString(), date,cbDone.isChecked());
 
-                Task newTask = new Task(name, date, isDone);
-
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("name", name);
-                resultIntent.putExtra("des", des);
-                resultIntent.putExtra("date", date.getTime());
-                resultIntent.putExtra("isDone", isDone);
-                setResult(Activity.RESULT_OK, resultIntent);
-
-
+                bundle.putSerializable("newTask",  tempTask);
+                //bundle.putInt("position", pos);
+                intent.putExtras(bundle);
+                setResult(RESULT_OK, intent);
                 finish();
 
             }

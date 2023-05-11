@@ -18,65 +18,47 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TaskListAdapter extends BaseAdapter {
+public class TaskListAdapter extends ArrayAdapter<Task> {
+    private  int resource;
+    private List<Task> tasks;
 
-    private Context context;
-    ArrayList<Task> item;
 
-    public TaskListAdapter(Context context, ArrayList<Task> item) {
-        this.context = context;
-        this.item = item;
+    public TaskListAdapter(@NonNull Context context, int resource, @NonNull List<Task> objects) {
+        super(context, resource, objects);
+        this.resource = resource;
+        this.tasks = objects;
     }
 
+    @NonNull
     @Override
-    public int getCount() {
-        return item.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return item.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        View v = view;
-      if (v == null) {
-           v = LayoutInflater.from(context).inflate(R.layout.list_item_task, viewGroup, false);
-          if (v == null) {
-              return null; // Nếu v vẫn là null, trả về null để tránh gây lỗi
-          }
-       }
-
-
-        // anh xa du lieu
-        Task task = item.get(i);
-        if(task != null)
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View v = convertView;
+        if (v ==  null)
         {
-            TextView tvName = v.findViewById(R.id.tvName);
-            TextView tvDate1 = v.findViewById(R.id.tvDateofTask);
-            CheckBox done = v.findViewById(R.id.cbDone);
-            tvName.setText(task.getName());
-            Date date = task.getDate(); // Lấy ngày hiện tại
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); // Định dạng ngày
-            String stringDate = dateFormat.format(date); // Chuyển đổi Date thành String theo định dạng
-            tvDate1.setText(stringDate);
-
-            if (task.isDone() == true)
-            {
-                done.setChecked(true);
-            }
-            else {
-                done.setChecked(false);
-            }
+            LayoutInflater vi;
+            vi = LayoutInflater.from(this.getContext());
+            v = vi.inflate(this.resource, null);
 
         }
-        return v;
+        Task t = getItem(position);
+        TextView tvTitle = v.findViewById(R.id.tvName);
+        //TextView tvDes = v.findViewById(R.id.)
+        TextView tvDate = v.findViewById(R.id.tvDateofTask);
+        CheckBox cbDone = v.findViewById(R.id.cbDone);
 
+        if (tvTitle!= null){
+            tvTitle.setText(t.getName());
+        }
+        if (tvDate!= null){
+            Date temp = t.getDate();
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            String dateString = format.format(temp);
+            tvDate.setText(dateString);
+        }
+        if (cbDone!= null){
+            cbDone.setChecked(t.isDone());
+        }
+        return v;
     }
 }
+
