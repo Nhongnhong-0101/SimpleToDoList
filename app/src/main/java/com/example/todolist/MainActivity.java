@@ -27,10 +27,12 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    ListView  lvTasks ;
+    ListView  lv ;
     List<Task> tasks ;
     TaskListAdapter adapter;
     ActivityResultLauncher <Intent> fromNew;
+    ActivityResultLauncher <Intent> fromEdit;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,12 +40,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //
         tasks = new ArrayList<>();
+        tasks.add(new Task("b", "bb", new Date(), false));
         //
-        lvTasks = findViewById(R.id.lvTasks);
+        lv = findViewById(R.id.lvTasks);
         //
         adapter = new TaskListAdapter(this, R.layout.list_item_task, tasks);
-        lvTasks.setAdapter(adapter);
-        registerForContextMenu(lvTasks);
+        lv.setAdapter(adapter);
+        registerForContextMenu(lv);
 
         fromNew = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = result.getData();
                             Task newTask = (Task) intent.getExtras().get("newTask");
                             tasks.add(newTask);
-                            lvTasks.deferNotifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
                         }
                     }
                 }
@@ -69,6 +72,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch ( item.getItemId())
+        {
+            case R.id.btnUpdate:
+                Intent intent = new Intent(MainActivity.this, NewTask.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("task", tasks.get(menuInfo.position));
+                bundle.putInt("position", menuInfo.position);
+                intent.putExtras(bundle);
+                fromEdit.launch(intent);
+                break;
+
+            case R.id.btnDelete:
+                tasks.remove(menuInfo.position);
+                adapter.notifyDataSetChanged();
+                break;
+        }
+
         return super.onContextItemSelected(item);
     }
 

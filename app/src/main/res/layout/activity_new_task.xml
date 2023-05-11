@@ -22,7 +22,7 @@
             android:textSize="25dp"
             />
         <EditText
-            android:id="@+id/etName"
+            android:id="@+id/et_Name"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -45,7 +45,7 @@
             android:textSize="25dp"
             />
         <EditText
-            android:id="@+id/etDetails"
+            android:id="@+id/et_Details"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -67,7 +67,7 @@
             android:textSize="25dp"
             />
         <EditText
-            android:id="@+id/etDate"
+            android:id="@+id/et_Date"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -92,7 +92,7 @@
             android:textSize="25dp"
             />
         <CheckBox
-            android:id="@+id/cbIsDone"
+            android:id="@+id/cb_IsDone"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"

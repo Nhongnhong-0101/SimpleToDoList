@@ -30,10 +30,10 @@ public class NewTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
-        edTitle = findViewById(R.id.etName);
-        edDate = findViewById(R.id.etDate);
-        edDes = findViewById(R.id.etDetails);
-        cbDone = findViewById(R.id.cbIsDone);
+        edTitle = findViewById(R.id.et_Name);
+        edDate = findViewById(R.id.et_Date);
+        edDes = findViewById(R.id.et_Details);
+        cbDone = findViewById(R.id.cb_IsDone);
         btSave = (Button) findViewById(R.id.btnSave);
 
         btSave.setOnClickListener(new View.OnClickListener() {
